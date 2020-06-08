@@ -17,6 +17,7 @@
 		702BC1322486234F0026DE4B /* PokemonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702BC1312486234F0026DE4B /* PokemonCell.swift */; };
 		702BC134248626D70026DE4B /* PokemonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702BC133248626D70026DE4B /* PokemonService.swift */; };
 		702BC136248626EB0026DE4B /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 702BC135248626EB0026DE4B /* Pokemon.swift */; };
+		70CA7103248EA7850086F3E7 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CA7102248EA7850086F3E7 /* InfoView.swift */; };
 		BF25942A5ED7CA6F4D9DDA97 /* Pods_pokeBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF2D5ACFD1C27937635BE95B /* Pods_pokeBook.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		702BC1312486234F0026DE4B /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
 		702BC133248626D70026DE4B /* PokemonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonService.swift; sourceTree = "<group>"; };
 		702BC135248626EB0026DE4B /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
+		70CA7102248EA7850086F3E7 /* InfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoView.swift; sourceTree = "<group>"; };
 		A81C10FB1EB5EFCB464B7FC1 /* Pods-pokeBook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeBook.debug.xcconfig"; path = "Target Support Files/Pods-pokeBook/Pods-pokeBook.debug.xcconfig"; sourceTree = "<group>"; };
 		EF2D5ACFD1C27937635BE95B /* Pods_pokeBook.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pokeBook.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				702BC1312486234F0026DE4B /* PokemonCell.swift */,
+				70CA7102248EA7850086F3E7 /* InfoView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				70CA7103248EA7850086F3E7 /* InfoView.swift in Sources */,
 				702BC136248626EB0026DE4B /* Pokemon.swift in Sources */,
 				702BC1322486234F0026DE4B /* PokemonCell.swift in Sources */,
 				702BC12E248620F60026DE4B /* PokeBookController.swift in Sources */,

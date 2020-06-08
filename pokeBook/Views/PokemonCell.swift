@@ -58,10 +58,20 @@ class PokemonCell:UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: Selectors
+    @objc func longPressed(sender: UILongPressGestureRecognizer){
+        if sender.state == UIGestureRecognizer.State.began {
+            print("Tapped started")
+        }
+    }
+    
     // MARK: Helper functions
     func configureViewComponents(){
         self.layer.cornerRadius = 10
         self.layer.masksToBounds = true
+        
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        self.addGestureRecognizer(longPressRecognizer)
         
         self.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false

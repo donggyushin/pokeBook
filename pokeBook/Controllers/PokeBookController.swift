@@ -15,6 +15,11 @@ class PokeBookController:UICollectionViewController {
     let pokemonService = PokemonService()
     var pokemons = [Pokemon]()
     
+    lazy var infoView:InfoView = {
+        let view = InfoView()
+        return view
+    }()
+    
     // MARK: Init
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,6 +59,14 @@ class PokeBookController:UICollectionViewController {
         pokemonService.delegate = self
         collectionView.register(PokemonCell.self, forCellWithReuseIdentifier: reuseableIdentifier)
         self.pokemonService.fetchPokemons()
+        
+        
+        collectionView.addSubview(infoView)
+        infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoView.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor, constant: 0).isActive = true
+        infoView.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -55).isActive = true
+        infoView.heightAnchor.constraint(equalToConstant: 500).isActive = true
+        infoView.widthAnchor.constraint(equalToConstant: view.frame.width - 80).isActive = true
         
     }
     
