@@ -26,7 +26,6 @@ class PokemonService {
                     if let data = data {
                         do {
                             let res = try JSONDecoder().decode([Pokemon].self, from: data)
-                            print(res)
                             DispatchQueue.main.async {
                                 self.delegate?.pokemonService(pokemons: res)
                             }

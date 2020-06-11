@@ -9,8 +9,15 @@
 import UIKit
 import SDWebImage
 
+protocol  PokemonCellProtocol {
+    func showInfoView(pokemon:Pokemon)
+}
+
 class PokemonCell:UICollectionViewCell {
     // MARK: Properties
+    
+    var delegate:PokemonCellProtocol?
+    
     var pokemon:Pokemon? {
         didSet {
             guard self.pokemon != nil else { return }
@@ -61,7 +68,8 @@ class PokemonCell:UICollectionViewCell {
     // MARK: Selectors
     @objc func longPressed(sender: UILongPressGestureRecognizer){
         if sender.state == UIGestureRecognizer.State.began {
-            print("Tapped started")
+            guard let pokemon = self.pokemon else { return }
+            delegate?.showInfoView(pokemon: pokemon)
         }
     }
     
