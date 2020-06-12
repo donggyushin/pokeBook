@@ -10,7 +10,7 @@ import UIKit
 import SDWebImage
 
 protocol  InfoViewProtocol {
-    func removeInfoView()
+    func removeInfoView(pokemon:Pokemon)
 }
 
 class InfoView:UIView {
@@ -128,7 +128,8 @@ class InfoView:UIView {
     
     // MARK: Selectors
     @objc func detailButtonTapped() {
-        self.delegate?.removeInfoView()
+        guard let pokemon = self.pokemon else { return }
+        self.delegate?.removeInfoView(pokemon: pokemon)
     }
     
     // MARK: Helpers
@@ -150,8 +151,6 @@ class InfoView:UIView {
         if let height = pokemon.height {
             self.heightValueLabel.text = String(height)
         }
-        
-        print(pokemon)
     }
     
     func adjustColors(){
@@ -175,7 +174,7 @@ class InfoView:UIView {
         nameView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         nameView.leftAnchor.constraint(equalTo: self.leftAnchor).isActive = true
         nameView.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
-        nameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        nameView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         self.addSubview(imageView)
         imageView.translatesAutoresizingMaskIntoConstraints = false

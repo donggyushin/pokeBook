@@ -14,10 +14,20 @@ class PokeBookController:UICollectionViewController {
     // MARK: Properties
     let pokemonService = PokemonService()
     var pokemons = [Pokemon]()
+    var searchedPokemons = [Pokemon]()
+    var searchMode = false
     
     lazy var infoView:InfoView = {
         let view = InfoView()
         return view
+    }()
+    
+    lazy var searchBar:UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.sizeToFit()
+        searchBar.showsCancelButton = true
+        searchBar.delegate = self
+        return searchBar
     }()
     
     lazy var blurView:UIVisualEffectView = {
@@ -39,7 +49,8 @@ class PokeBookController:UICollectionViewController {
     
     // MARK: Selectors
     @objc func searchButtonTapped(){
-        print("search button tapped")
+        
+        configureSearchBar()
     }
     
     @objc func blurviewTapped(){
@@ -47,6 +58,18 @@ class PokeBookController:UICollectionViewController {
     }
     
     // MARK: Helper Functions
+    
+    func removeSearchBar(){
+        self.navigationItem.titleView = nil
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: self, action: #selector(searchButtonTapped))
+        adjustColors()
+    }
+    
+    func configureSearchBar(){
+        self.navigationItem.titleView = searchBar
+        self.navigationItem.rightBarButtonItem = nil
+        searchBar.becomeFirstResponder()
+    }
     
     func removeInfoViewAnimation(){
         UIView.animate(withDuration: 0.3, animations: {
@@ -82,7 +105,7 @@ class PokeBookController:UICollectionViewController {
         collectionView.register(PokemonCell.self, forCellWithReuseIdentifier: reuseableIdentifier)
         self.pokemonService.fetchPokemons()
         
-        self.collectionView.addSubview(blurView)
+        self.view.addSubview(blurView)
         blurView.translatesAutoresizingMaskIntoConstraints = false
         blurView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         blurView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
@@ -100,12 +123,31 @@ class PokeBookController:UICollectionViewController {
 
 extension PokeBookController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.pokemons.count
+        
+        if searchMode {
+            return self.searchedPokemons.count
+        }else {
+            return self.pokemons.count
+        }
+        
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let pokemon = self.pokemons[indexPath.row]
+        let pokemonDetailController = PokemonDetailController()
+        pokemonDetailController.pokemon = pokemon
+        self.navigationController?.pushViewController(pokemonDetailController, animated: true)
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseableIdentifier, for: indexPath) as! PokemonCell
-        cell.pokemon = self.pokemons[indexPath.row]
+        
+        if searchMode {
+            cell.pokemon = self.searchedPokemons[indexPath.row]
+        }else {
+            cell.pokemon = self.pokemons[indexPath.row]
+        }
+        
         cell.delegate = self
         return cell
     }
@@ -138,11 +180,11 @@ extension PokeBookController:PokemonServiceProtocol {
 
 extension PokeBookController:PokemonCellProtocol {
     func showInfoView(pokemon: Pokemon) {
-        collectionView.addSubview(infoView)
+        self.view.addSubview(infoView)
         infoView.delegate = self
         infoView.translatesAutoresizingMaskIntoConstraints = false
-        infoView.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor, constant: 0).isActive = true
-        infoView.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -55).isActive = true
+        infoView.centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0).isActive = true
+        infoView.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -25).isActive = true
         infoView.heightAnchor.constraint(equalToConstant: 500).isActive = true
         infoView.widthAnchor.constraint(equalToConstant: view.frame.width - 80).isActive = true
         infoView.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
@@ -158,9 +200,38 @@ extension PokeBookController:PokemonCellProtocol {
 }
 
 extension PokeBookController:InfoViewProtocol {
-    func removeInfoView() {
+    func removeInfoView(pokemon: Pokemon) {
         removeInfoViewAnimation()
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) {
+            let pokemonDetailController = PokemonDetailController()
+            pokemonDetailController.pokemon = pokemon
+            self.navigationController?.pushViewController(pokemonDetailController, animated: true)
+        }
+    }
+}
+
+
+extension PokeBookController:UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchMode = false
+        removeSearchBar()
+        self.searchBar.text = ""
+        collectionView.reloadData()
     }
     
-    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        var searchedPokemons = [Pokemon]()
+        if searchText == "" {
+            searchMode = false
+        }else {
+            searchMode = true
+            let matchingPokemons = self.pokemons.filter { (pokemon) -> Bool in
+                guard let name = pokemon.name else { return false }
+                return name.lowercased().contains(searchText.lowercased())
+            }
+            searchedPokemons = matchingPokemons
+            self.searchedPokemons = searchedPokemons
+        }
+        collectionView.reloadData()
+    }
 }
